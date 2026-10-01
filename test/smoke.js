@@ -122,7 +122,7 @@ async function withCookie(url, opts = {}) {
   const login = await withCookie('/admin/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `email=${encodeURIComponent(admin.email)}&password=ChangeMe%40123`
+    body: `email=${encodeURIComponent(admin.email)}&password=${encodeURIComponent(process.env.SBP_ADMIN_PASSWORD || 'ChangeMe@123')}`
   });
   ok('login succeeds with seeded credentials', login.status === 302 && login.headers.get('location') === '/admin');
 

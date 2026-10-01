@@ -30,6 +30,13 @@ const upload = multer({
   fileFilter: (_req, file, cb) => cb(null, /^image\/(jpe?g|png|webp|gif|avif)$/.test(file.mimetype))
 });
 
+/**
+ * Endpoints without a file field still receive multipart bodies from the
+ * dashboard forms, so they need multer in "fields only" mode — otherwise
+ * req.body is undefined for that content type.
+ */
+const parseFields = upload.none();
+
 const CATEGORIES = ['Hair', 'Skin Care', 'Threading', 'Waxing', 'Makeup', 'Bridal', 'Hairstyling', 'Other'];
 
 module.exports = function adminRoutes({ loginLimiter }) {
@@ -127,8 +134,9 @@ module.exports = function adminRoutes({ loginLimiter }) {
   });
 
   router.post('/appointments/:id/status', async (req, res) => {
+    const body = req.body || {};
     const id = Number(req.params.id);
-    const status = ['confirmed', 'pending', 'completed', 'cancelled'].includes(req.body.status) ? req.body.status : null;
+    const status = ['confirmed', 'pending', 'completed', 'cancelled'].includes(body.status) ? body.status : null;
     if (!status) return res.status(400).json({ success: false, message: 'Unknown status.' });
     const before = get('SELECT * FROM appointments WHERE id = ?', id);
     if (!before) return res.status(404).json({ success: false, message: 'Appointment not found.' });
@@ -141,10 +149,11 @@ module.exports = function adminRoutes({ loginLimiter }) {
   });
 
   router.post('/appointments/:id/reschedule', (req, res) => {
+    const body = req.body || {};
     const id = Number(req.params.id);
     const before = get('SELECT * FROM appointments WHERE id = ?', id);
     if (!before) return res.status(404).json({ success: false, message: 'Not found.' });
-    run("UPDATE appointments SET appt_date=?, appt_time=?, reminder_24h=0, reminder_2h=0, updated_at=datetime('now') WHERE id=?", clean(req.body.date, 10), clean(req.body.time, 5), id);
+    run("UPDATE appointments SET appt_date=?, appt_time=?, reminder_24h=0, reminder_2h=0, updated_at=datetime('now') WHERE id=?", clean(body.date, 10), clean(body.time, 5), id);
     audit(req.admin.email, 'appointment_reschedule', 'appointment', before.reference);
     res.json({ success: true, message: 'Appointment rescheduled.' });
   });
@@ -192,7 +201,7 @@ module.exports = function adminRoutes({ loginLimiter }) {
   /* ---------- reviews ---------- */
   router.get('/reviews', view('reviews', { title: 'Reviews', reviews: all('SELECT * FROM reviews ORDER BY id DESC') }));
 
-  router.post('/reviews/save', (req, res) => {
+  router.post('/reviews/save', parseFields, (req, res) => {
     const id = Number(req.body.id) || 0;
     const fields = {
       name: clean(req.body.name, 60),
@@ -246,7 +255,7 @@ module.exports = function adminRoutes({ loginLimiter }) {
   /* ---------- FAQs ---------- */
   router.get('/faqs', view('faqs', { title: 'FAQs', faqs: all('SELECT * FROM faqs ORDER BY sort_order, id') }));
 
-  router.post('/faqs/save', (req, res) => {
+  router.post('/faqs/save', parseFields, (req, res) => {
     const id = Number(req.body.id) || 0;
     const question = clean(req.body.question, 160);
     const answer = clean(req.body.answer, 800);
@@ -284,15 +293,15 @@ module.exports = function adminRoutes({ loginLimiter }) {
     res.redirect('/admin/settings?ok=Settings%20saved');
   });
 
-  router.post('/change-password', (req, res) => {
-    const current = String(req.body.current_password || '');
-    const next = String(req.body.new_password || '');
+  router.post('/change-password', parseFields, (req, res) => {
+    const current = String((req.body && req.body.current_password) || '');
+    const next = String((req.body && req.body.new_password) || '');
     const user = get('SELECT * FROM admin_users WHERE id = ?', req.admin.id);
     if (!user || !bcrypt.compareSync(current, user.password_hash)) return res.status(400).json({ success: false, message: 'Current password is incorrect.' });
     if (next.length < 8) return res.status(400).json({ success: false, message: 'New password must be at least 8 characters.' });
     run('UPDATE admin_users SET password_hash = ? WHERE id = ?', bcrypt.hashSync(next, 12), user.id);
     audit(req.admin.email, 'password_change', 'admin_user', '');
-    res.json({ success: true, message: 'Password updated.' });
+    res.json({ success: true, message: 'Password updated. Use the new password next time you sign in.' });
   });
 
   return router;

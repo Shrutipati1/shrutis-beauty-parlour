@@ -97,8 +97,10 @@ app.use((req, res) => {
 
 app.use((err, req, res, _next) => {
   console.error(err);
-  const wantsJson = req.accepts(['html', 'json']) === 'json' || req.path.startsWith('/api');
-  if (wantsJson) return res.status(err.status || 500).json({ success: false, message: err.expose ? err.message : 'Something went wrong.' });
+  // dashboard/API calls must receive JSON, otherwise the UI reports "network error"
+  const wantsJson = req.path.startsWith('/api')
+    || (req.path.startsWith('/admin') && req.method !== 'GET' && req.method !== 'HEAD');
+  if (wantsJson) return res.status(err.status || 500).json({ success: false, message: err.expose ? err.message : 'Something went wrong. Please try again.' });
   res.status(err.status || 500).render('500', { title: 'Something went wrong', description: 'Please try again in a moment.' });
 });
 
