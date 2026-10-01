@@ -1,0 +1,43 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Testimonials</p>
+      <h1>Kind words from our <em>clients</em></h1>
+      <p class="lead">The reviews below are clearly marked <strong>sample reviews</strong> created for layout purposes. Real client reviews can be added and edited from the admin dashboard.</p>
+    </div>
+  </section>
+
+  <section class="section section-blush">
+    <div class="container">
+      <div class="notice-banner">
+        <strong>Sample content notice</strong>
+        <p>These reviews are placeholders. They are labelled as samples and should be replaced with genuine feedback before launch.</p>
+      </div>
+      <div class="review-grid wide">
+        <% reviews.forEach(function (r) { %>
+          <article class="review-card reveal">
+            <div class="stars" aria-label="<%= r.rating %> out of 5 stars"><%= '★'.repeat(r.rating) %><span class="stars-dim"><%= '★'.repeat(5 - r.rating) %></span></div>
+            <p><%= r.body %></p>
+            <footer>
+              <strong><%= r.name %></strong>
+              <% if (r.is_sample) { %><span class="badge-sample">Sample review</span><% } %>
+            </footer>
+          </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <div>
+        <p class="eyebrow light">Your turn</p>
+        <h2>Book the look you have in mind</h2>
+      </div>
+      <a class="btn btn-primary btn-lg" href="/book">Book an Appointment</a>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

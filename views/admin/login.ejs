@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner login · <%= cfg ? cfg.business_name : 'Salon' %></title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-login-page">
+  <div class="login-card">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5c5 6 8 10 8 14a8 8 0 1 1-16 0c0-4 3-8 8-14Z"/><path d="M12 33h16" stroke-linecap="round"/></svg></span>
+    <h1>Owner login</h1>
+    <p class="admin-sub"><%= cfg ? cfg.business_name : 'Salon' %> · dashboard access</p>
+    <% if (error) { %><div class="admin-alert error"><%= error %></div><% } %>
+    <form method="post" action="/admin/login">
+      <input type="hidden" name="next" value="<%= next %>">
+      <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="username" autofocus></label>
+      <label class="field"><span>Password</span><input type="password" name="password" required autocomplete="current-password"></label>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Sign in</button>
+    </form>
+    <p class="login-hint">Default credentials are printed in the server console on first run. Change the password from Business settings after signing in.</p>
+  </div>
+</body>
+</html>

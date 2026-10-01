@@ -1,0 +1,100 @@
+<%- include('partials/head') %>
+<form method="post" action="/admin/settings">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <section class="admin-panel">
+    <div class="panel-head"><h2>Business details</h2><p class="admin-hint">Empty fields show a friendly placeholder on the website — nothing fake is published.</p></div>
+    <div class="form-grid">
+      <label class="field"><span>Business name</span><input type="text" name="business_name" value="<%= settings.business_name %>"></label>
+      <label class="field"><span>Tagline</span><input type="text" name="tagline" value="<%= settings.tagline %>"></label>
+      <label class="field span-2"><span>Hero headline</span><input type="text" name="hero_headline" value="<%= settings.hero_headline %>"></label>
+      <label class="field span-2"><span>Hero subtext</span><textarea name="hero_subtext" rows="2"><%= settings.hero_subtext %></textarea></label>
+      <label class="field span-2"><span>About section text</span><textarea name="about_text" rows="5"><%= settings.about_text %></textarea></label>
+      <label class="field"><span>Phone</span><input type="tel" name="phone" value="<%= settings.phone %>" placeholder="Add actual number"></label>
+      <label class="field"><span>WhatsApp number</span><input type="tel" name="whatsapp" value="<%= settings.whatsapp %>" placeholder="919876543210"></label>
+      <label class="field"><span>Email</span><input type="email" name="email" value="<%= settings.email %>" placeholder="Add actual email"></label>
+      <label class="field"><span>City</span><input type="text" name="city" value="<%= settings.city %>" placeholder="Add city"></label>
+      <label class="field span-2"><span>Address</span><input type="text" name="address_line" value="<%= settings.address_line %>" placeholder="Add full address"></label>
+      <label class="field span-2"><span>Google Maps embed URL</span><input type="url" name="maps_embed_url" value="<%= settings.maps_embed_url %>" placeholder="https://www.google.com/maps/embed?…"></label>
+      <label class="field"><span>Instagram URL</span><input type="url" name="instagram_url" value="<%= settings.instagram_url %>"></label>
+      <label class="field"><span>Facebook URL</span><input type="url" name="facebook_url" value="<%= settings.facebook_url %>"></label>
+    </div>
+  </section>
+
+  <section class="admin-panel">
+    <div class="panel-head"><h2>Opening hours &amp; booking rules</h2></div>
+    <div class="form-grid">
+      <label class="field"><span>Opens at</span><input type="time" name="open_time" value="<%= settings.open_time %>"></label>
+      <label class="field"><span>Closes at</span><input type="time" name="close_time" value="<%= settings.close_time %>"></label>
+      <label class="field"><span>Slot interval (minutes)</span><input type="number" name="slot_interval" min="15" max="120" step="15" value="<%= settings.slot_interval %>"></label>
+      <label class="field"><span>Booking horizon (days)</span><input type="number" name="booking_horizon_days" min="1" max="365" value="<%= settings.booking_horizon_days %>"></label>
+      <label class="field"><span>Cancellation notice (hours)</span><input type="number" name="cancellation_notice_hours" min="0" max="168" value="<%= settings.cancellation_notice_hours %>"></label>
+      <label class="field"><span>Timezone</span><input type="text" name="timezone" value="<%= settings.timezone %>"></label>
+      <label class="field"><span>Public site URL</span><input type="url" name="public_base_url" value="<%= settings.public_base_url %>" placeholder="https://yoursite.com"></label>
+      <label class="field span-2"><span>Closed-days note</span><input type="text" name="salon_closed_note" value="<%= settings.salon_closed_note %>"></label>
+      <label class="field"><span>24-hour reminders</span>
+        <select name="reminder_24h"><option value="1" <%= settings.reminder_24h === '1' ? 'selected' : '' %>>On</option><option value="0" <%= settings.reminder_24h !== '1' ? 'selected' : '' %>>Off</option></select>
+      </label>
+      <label class="field"><span>2-hour reminders</span>
+        <select name="reminder_2h"><option value="1" <%= settings.reminder_2h === '1' ? 'selected' : '' %>>On</option><option value="0" <%= settings.reminder_2h !== '1' ? 'selected' : '' %>>Off</option></select>
+      </label>
+      <label class="field"><span>Payment required online</span>
+        <select name="require_payment_online"><option value="0" <%= settings.require_payment_online !== '1' ? 'selected' : '' %>>No — pay at salon</option><option value="1" <%= settings.require_payment_online === '1' ? 'selected' : '' %>>Yes</option></select>
+      </label>
+      <label class="field"><span>Payment note</span><input type="text" name="payment_note" value="<%= settings.payment_note %>"></label>
+      <label class="field span-2"><span>Price disclaimer</span><input type="text" name="disclaimer" value="<%= settings.disclaimer %>"></label>
+      <label class="field span-2"><span>SEO meta description</span><textarea name="seo_description" rows="2"><%= settings.seo_description || '' %></textarea></label>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary btn-lg" type="submit">Save settings</button>
+    </div>
+  </section>
+</form>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Change password</h2></div>
+  <form class="admin-form" id="passwordForm">
+    <div class="form-grid">
+      <label class="field"><span>Current password</span><input type="password" name="current_password" required autocomplete="current-password"></label>
+      <label class="field"><span>New password</span><input type="password" name="new_password" required minlength="8" autocomplete="new-password"></label>
+    </div>
+    <button class="btn btn-outline" type="submit">Update password</button>
+    <p class="form-msg" id="passwordMsg" role="status"></p>
+  </form>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Notification log</h2></div>
+  <% if (!notifications.length) { %>
+    <p class="empty-state">Nothing sent yet. Add SMTP credentials in <code>.env</code> to send real emails, or an SMS webhook URL for texts.</p>
+  <% } else { %>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>When</th><th>Channel</th><th>Recipient</th><th>Type</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody>
+        <% notifications.forEach(function (n) { %>
+          <tr>
+            <td><%= n.created_at %></td><td><%= n.channel %></td><td><%= n.recipient %></td><td><%= n.kind %></td>
+            <td><span class="status status-<%= n.status === 'sent' ? 'confirmed' : n.status === 'failed' ? 'cancelled' : 'pending' %>"><%= n.status %></span></td>
+            <td><%= n.detail %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Recent admin activity</h2></div>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Entity</th><th>Detail</th></tr></thead>
+      <tbody>
+        <% auditLog.forEach(function (a) { %>
+          <tr><td><%= a.created_at %></td><td><%= a.actor %></td><td><%= a.action %></td><td><%= a.entity %></td><td><%= a.detail %></td></tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/foot', { adminScript: '/js/admin-services.js' }) %>

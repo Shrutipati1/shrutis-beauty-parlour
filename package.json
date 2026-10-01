@@ -1,0 +1,38 @@
+{
+  "name": "shrutis-beauty-parlour",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shruti's Beauty Parlour - salon website, booking system and admin dashboard.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node src/seed.js",
+    "reset-admin": "node src/reset-admin.js",
+    "test": "node test/smoke.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^10.0.13"
+  },
+  "keywords": [
+    "salon",
+    "beauty",
+    "booking",
+    "express",
+    "sqlite"
+  ],
+  "license": "MIT"
+}

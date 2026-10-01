@@ -1,0 +1,60 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">About us</p>
+      <h1>A calm space for your <em>beauty routine</em></h1>
+      <p class="lead"><%= cfg.hero_subtext %></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-grid">
+      <div class="about-media reveal">
+        <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?auto=format&fit=crop&w=1200&q=85" alt="Beauty professional working with a client" loading="lazy">
+      </div>
+      <div class="about-copy reveal">
+        <p class="eyebrow">Our story</p>
+        <h2>Beauty, hair, makeup and <em>styling</em></h2>
+        <p class="lead"><%= cfg.about_text %></p>
+        <p>Because every client is different, we never work from a fixed script. We begin with a conversation, recommend what suits you, and keep you comfortable and informed throughout.</p>
+        <div class="pill-row">
+          <span class="pill">Experience</span>
+          <span class="pill">Professional service</span>
+          <span class="pill">Personalized attention</span>
+          <span class="pill">Hygienic environment</span>
+          <span class="pill">Quality products</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-blush">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">What you can expect</p>
+        <h2>Simple, honest, <em>comfortable</em></h2>
+      </div>
+      <div class="why-grid">
+        <article class="why-card reveal"><h3>Experience</h3><p>Practical, hands-on experience across everyday grooming, occasion looks and bridal styling.</p></article>
+        <article class="why-card reveal"><h3>Professional service</h3><p>Appointments start on time, with clear pricing shared before we begin.</p></article>
+        <article class="why-card reveal"><h3>Personalized attention</h3><p>Your hair type, skin sensitivity and comfort level guide every recommendation.</p></article>
+        <article class="why-card reveal"><h3>Hygienic environment</h3><p>Sanitised tools, fresh linens and disposables used for each client.</p></article>
+        <article class="why-card reveal"><h3>Quality products</h3><p>Trusted, widely used products selected to suit your hair and skin.</p></article>
+        <article class="why-card reveal"><h3>Sample pricing</h3><p>Prices listed on this site are samples and can be updated any time from the dashboard.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <div>
+        <p class="eyebrow light">Next step</p>
+        <h2>Ready to feel your best?</h2>
+      </div>
+      <a class="btn btn-primary btn-lg" href="/book">Book an Appointment</a>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

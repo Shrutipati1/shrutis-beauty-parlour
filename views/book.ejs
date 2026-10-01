@@ -1,0 +1,123 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero compact">
+    <div class="container">
+      <p class="eyebrow">Appointments</p>
+      <h1>Book your <em>appointment</em></h1>
+      <p class="lead">Choose a service, pick a date and select an available time slot. You will get an instant confirmation with a booking ID.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container booking-layout">
+      <div class="booking-form-wrap">
+        <form id="bookingForm" class="booking-form" novalidate>
+          <div class="form-step">
+            <span class="step-no">1</span>
+            <h2>Your details</h2>
+            <div class="field-row">
+              <label class="field">
+                <span>Full name *</span>
+                <input type="text" name="name" required autocomplete="name" placeholder="Your full name">
+              </label>
+              <label class="field">
+                <span>Mobile number *</span>
+                <input type="tel" name="phone" required inputmode="numeric" autocomplete="tel" placeholder="10-digit number">
+              </label>
+            </div>
+            <label class="field">
+              <span>Email <small>(optional — for confirmation)</small></span>
+              <input type="email" name="email" autocomplete="email" placeholder="you@example.com">
+            </label>
+          </div>
+
+          <div class="form-step">
+            <span class="step-no">2</span>
+            <h2>Choose your service</h2>
+            <label class="field">
+              <span>Service *</span>
+              <select name="service_id" required id="serviceSelect">
+                <option value="">Select a service</option>
+                <% services.forEach(function (s) { %>
+                  <option value="<%= s.id %>" data-price="<%= s.price %>" data-duration="<%= s.duration %>" data-category="<%= s.category %>" data-image="<%= s.image %>"
+                    <%= String(booking.serviceId) === String(s.id) ? 'selected' : '' %>>
+                    <%= s.name %> — <%= rupees(s.price) %> (<%= s.duration %> min)
+                  </option>
+                <% }); %>
+              </select>
+            </label>
+            <div class="service-preview" id="servicePreview" hidden>
+              <img src="" alt="">
+              <div>
+                <strong></strong>
+                <p></p>
+                <span class="preview-meta"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-step">
+            <span class="step-no">3</span>
+            <h2>Pick a date &amp; time</h2>
+            <div class="field-row">
+              <label class="field">
+                <span>Date *</span>
+                <input type="date" name="date" id="dateInput" required min="<%= booking.date %>">
+              </label>
+              <label class="field">
+                <span>Time slot *</span>
+                <select name="time" id="timeSelect" required disabled>
+                  <option value="">Select service &amp; date first</option>
+                </select>
+              </label>
+            </div>
+            <p class="slot-hint" id="slotHint">We are open <%= prettyTime(booking.open) %> – <%= prettyTime(booking.close) %>. Closed on Sundays.</p>
+          </div>
+
+          <div class="form-step">
+            <span class="step-no">4</span>
+            <h2>Anything we should know?</h2>
+            <label class="field">
+              <span>Additional message <small>(optional)</small></span>
+              <textarea name="message" rows="3" placeholder="Allergies, preferred style, or anything else..."></textarea>
+            </label>
+          </div>
+
+          <div class="booking-total" id="bookingTotal" hidden>
+            <div><small>Service</small><strong id="totalService">—</strong></div>
+            <div><small>Duration</small><strong id="totalDuration">—</strong></div>
+            <div><small>Total (sample price)</small><strong id="totalPrice">—</strong></div>
+          </div>
+
+          <p class="form-error" id="bookingError" role="alert" hidden></p>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" id="bookingSubmit">Confirm Appointment</button>
+          <p class="form-note"><%= cfg.payment_note %></p>
+        </form>
+      </div>
+
+      <aside class="booking-aside">
+        <div class="aside-card">
+          <h3>Salon hours</h3>
+          <p><strong><%= prettyTime(booking.open) %> – <%= prettyTime(booking.close) %></strong></p>
+          <small><%= cfg.salon_closed_note %></small>
+        </div>
+        <div class="aside-card">
+          <h3>Good to know</h3>
+          <ul class="mini-list">
+            <li>Bookings open up to <%= cfg.booking_horizon_days %> days ahead.</li>
+            <li>A slot is held only once you confirm.</li>
+            <li>You can cancel or reschedule from your booking link.</li>
+            <li><%= cfg.require_payment_online === '1' ? 'Online payment is requested at booking.' : 'No online payment needed — pay at the salon.' %></li>
+          </ul>
+        </div>
+        <div class="aside-card soft">
+          <h3>Need help?</h3>
+          <p><%= cfg.phone ? 'Call ' + cfg.phone : 'Add your phone number in the admin settings.' %></p>
+          <% if (whatsappUrl) { %><a class="btn btn-outline btn-block" href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer">WhatsApp us</a><% } %>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer', { pageScript: '/js/booking.js' }) %>

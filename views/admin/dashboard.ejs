@@ -1,0 +1,63 @@
+<%- include('partials/head') %>
+<section class="stat-grid">
+  <div class="stat-card highlight"><small>Today's appointments</small><strong><%= stats.today %></strong><a href="/admin/appointments?date=<%= today %>">View today →</a></div>
+  <div class="stat-card"><small>Upcoming</small><strong><%= stats.upcoming %></strong><span>confirmed &amp; pending</span></div>
+  <div class="stat-card"><small>Completed</small><strong><%= stats.completed %></strong><span>all time</span></div>
+  <div class="stat-card"><small>Cancelled</small><strong><%= stats.cancelled %></strong><span>all time</span></div>
+  <div class="stat-card"><small>Total bookings</small><strong><%= stats.total %></strong><span>all time</span></div>
+  <div class="stat-card"><small>Revenue estimate</small><strong><%= rupees(stats.revenue) %></strong><span>confirmed + completed</span></div>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head">
+    <h2>Upcoming appointments</h2>
+    <a class="btn btn-outline btn-sm" href="/admin/appointments">All appointments</a>
+  </div>
+  <% if (!upcoming.length) { %>
+    <p class="empty-state">No upcoming appointments yet. They will appear here as soon as customers book.</p>
+  <% } else { %>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Date</th><th>Time</th><th>Customer</th><th>Service</th><th>Price</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <% upcoming.forEach(function (a) { %>
+          <tr>
+            <td><%= prettyDate(a.appt_date) %></td>
+            <td><%= prettyTime(a.appt_time) %></td>
+            <td><%= a.customer_name %><small><%= a.phone %></small></td>
+            <td><%= a.service_name %></td>
+            <td><%= rupees(a.price) %></td>
+            <td><span class="status status-<%= a.status %>"><%= a.status %></span></td>
+            <td><a class="link" href="tel:<%= a.phone.replace(/\D/g,'') %>">Call</a></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Recent notifications</h2></div>
+  <% if (!recentNotifications.length) { %>
+    <p class="empty-state">No notifications sent yet. Configure SMTP or SMS in your <code>.env</code> file to enable delivery.</p>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>When</th><th>Channel</th><th>Recipient</th><th>Type</th><th>Status</th></tr></thead>
+        <tbody>
+          <% recentNotifications.forEach(function (n) { %>
+            <tr>
+              <td><%= n.created_at %></td>
+              <td><%= n.channel %></td>
+              <td><%= n.recipient %></td>
+              <td><%= n.kind %></td>
+              <td><span class="status status-<%= n.status === 'sent' ? 'confirmed' : 'pending' %>"><%= n.status %></span></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+<%- include('partials/foot') %>

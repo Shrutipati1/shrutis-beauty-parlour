@@ -1,0 +1,64 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Service menu</p>
+      <h1>Beauty services &amp; <em>sample prices</em></h1>
+      <p class="lead">Prices and durations below are realistic sample values for a local Indian beauty parlour. They are editable from the admin dashboard.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <% var catNames = Array.from(categories.keys()); %>
+      <div class="filter-tabs" data-filter-tabs>
+        <button class="tab active" data-filter="all">All</button>
+        <% catNames.forEach(function (cat) { %>
+          <button class="tab" data-filter="<%= cat %>"><%= cat %></button>
+        <% }); %>
+      </div>
+
+      <div class="service-list">
+        <% catNames.forEach(function (cat, i) { %>
+          <div class="cat-block" data-category="<%= cat %>">
+            <h2 class="cat-title reveal"><span class="cat-index"><%= String(i + 1).padStart(2, '0') %></span><%= cat %></h2>
+            <div class="cat-grid">
+              <% categories.get(cat).forEach(function (s) { %>
+                <article class="service-card horizontal reveal" id="service-<%= s.id %>">
+                  <div class="service-media">
+                    <img src="<%= s.image %>" alt="<%= s.name %>" loading="lazy">
+                  </div>
+                  <div class="service-body">
+                    <h3><%= s.name %></h3>
+                    <p><%= s.description %></p>
+                    <div class="service-meta">
+                      <span class="price"><%= rupees(s.price) %></span>
+                      <span class="duration"><%= s.duration %> minutes</span>
+                    </div>
+                    <a class="btn btn-primary btn-block" href="/book?service=<%= s.id %>">Book Now</a>
+                  </div>
+                </article>
+              <% }); %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <p class="disclaimer-note"><%= cfg.disclaimer %></p>
+    </div>
+  </section>
+
+  <section class="faq-strip">
+    <div class="container">
+      <h2 class="center faq-head">Frequently asked questions</h2>
+      <% faqs.forEach(function (f) { %>
+        <details class="faq-item">
+          <summary><%= f.question %></summary>
+          <p><%= f.answer %></p>
+        </details>
+      <% }); %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

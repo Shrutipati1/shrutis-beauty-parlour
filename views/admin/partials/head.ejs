@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %> · <%= cfg.business_name %></title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="csrf-token" content="<%= csrfToken %>">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+  <aside class="admin-side" id="adminSide">
+    <a class="admin-brand" href="/admin">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5c5 6 8 10 8 14a8 8 0 1 1-16 0c0-4 3-8 8-14Z"/><path d="M12 33h16" stroke-linecap="round"/></svg></span>
+      <span><strong><%= cfg.business_name %></strong><small>Admin dashboard</small></span>
+    </a>
+    <nav class="admin-nav">
+      <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">Dashboard</a>
+      <a href="/admin/appointments" class="<%= currentPath.includes('appointments') ? 'active' : '' %>">Appointments</a>
+      <a href="/admin/services" class="<%= currentPath.includes('services') ? 'active' : '' %>">Services &amp; prices</a>
+      <a href="/admin/gallery" class="<%= currentPath.includes('gallery') ? 'active' : '' %>">Gallery</a>
+      <a href="/admin/reviews" class="<%= currentPath.includes('reviews') ? 'active' : '' %>">Reviews</a>
+      <a href="/admin/faqs" class="<%= currentPath.includes('faqs') ? 'active' : '' %>">FAQs</a>
+      <a href="/admin/settings" class="<%= currentPath.includes('settings') ? 'active' : '' %>">Business settings</a>
+      <a href="/" target="_blank" rel="noopener">View website ↗</a>
+    </nav>
+    <form method="post" action="/admin/logout" class="admin-logout">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="btn btn-ghost btn-block" type="submit">Sign out</button>
+    </form>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-top">
+      <button class="admin-menu" id="adminMenu" type="button" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <div>
+        <h1><%= title %></h1>
+        <p class="admin-sub">Signed in as <strong><%= admin.email %></strong></p>
+      </div>
+    </header>
+    <% if (flash) { %><div class="admin-alert"><%= flash %></div><% } %>
+    <div class="admin-content">

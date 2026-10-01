@@ -1,0 +1,82 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero bridal-hero">
+    <div class="container">
+      <p class="eyebrow light">Bridal &amp; events</p>
+      <h1>Look beautiful on your <em>special day</em></h1>
+      <p class="lead">Bridal makeup, hairstyling and pre-bridal beauty planned around your dress, your venue and your comfort.</p>
+      <a class="btn btn-primary btn-lg" href="/book?category=bridal">Book Bridal Consultation</a>
+    </div>
+  </section>
+
+  <section class="section bridal-detail">
+    <div class="container bridal-grid">
+      <div class="bridal-media reveal">
+        <img class="bridal-main" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=1200&q=85" alt="Bridal makeup application" loading="lazy">
+        <img class="bridal-inset" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85" alt="Wedding day styling" loading="lazy">
+      </div>
+      <div class="bridal-copy reveal">
+        <p class="eyebrow">Your day, your way</p>
+        <h2>Beauty that lasts through <em>every photo</em></h2>
+        <p>South Asian bridal looks have to survive long ceremonies, warm weather and a lot of photographs. We plan for all three — long-wear base, a finish that photographs well, and a hairstyle that holds through dancing.</p>
+        <p>Every bridal plan starts with a consultation and, wherever possible, a trial session so nothing is a surprise on the day.</p>
+        <ul class="bridal-list">
+          <li><span>01</span> Bridal Makeup — HD finish, lashes, draping and dupatta setting</li>
+          <li><span>02</span> Bridal Hairstyle — elegant updos, soft waves, braided styles</li>
+          <li><span>03</span> Pre-bridal Beauty — cleanup sessions, facials and trials</li>
+          <li><span>04</span> Event Makeup — reception, engagement and party looks</li>
+          <li><span>05</span> Custom Styling — built around your outfit and comfort</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-blush">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Bridal packages</p>
+        <h2>Sample packages &amp; <em>pricing</em></h2>
+        <p>Editable sample packages — book a consultation first and we will tailor the plan to you.</p>
+      </div>
+      <div class="package-grid">
+        <% bridalServices.forEach(function (s, i) { %>
+          <article class="package-card reveal">
+            <span class="package-index"><%= String(i + 1).padStart(2, '0') %></span>
+            <h3><%= s.name %></h3>
+            <p><%= s.description %></p>
+            <div class="package-meta">
+              <span class="price"><%= rupees(s.price) %></span>
+              <span class="duration">~<%= s.duration %> min</span>
+            </div>
+            <a class="btn btn-outline btn-block" href="/book?service=<%= s.id %>">Book Now</a>
+          </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-strip">
+    <div class="container">
+      <h2 class="center faq-head">Bridal questions</h2>
+      <% faqs.filter(function (f) { return /bridal|book|multiple/i.test(f.question); }).forEach(function (f) { %>
+        <details class="faq-item">
+          <summary><%= f.question %></summary>
+          <p><%= f.answer %></p>
+        </details>
+      <% }); %>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <div>
+        <p class="eyebrow light">Wedding season books fast</p>
+        <h2>Reserve your date early</h2>
+        <p class="cta-text">We recommend booking 4–8 weeks ahead and adding a pre-bridal trial for the best result.</p>
+      </div>
+      <a class="btn btn-primary btn-lg" href="/book?category=bridal">Book Bridal Consultation</a>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

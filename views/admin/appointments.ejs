@@ -1,0 +1,78 @@
+<%- include('partials/head') %>
+<section class="admin-panel">
+  <div class="panel-head">
+    <h2>Appointments for <%= prettyDate(filterDate) %></h2>
+    <form method="get" class="inline-form">
+      <input type="date" name="date" value="<%= filterDate %>" onchange="this.form.submit()">
+      <button class="btn btn-outline btn-sm" type="submit">Show day</button>
+    </form>
+  </div>
+
+  <% if (filterDate && !forDate.length) { %>
+    <p class="empty-state">Nothing booked on this day.</p>
+  <% } %>
+
+  <% if (forDate.length) { %>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Time</th><th>Customer</th><th>Service</th><th>Duration</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% forDate.forEach(function (a) { %>
+          <tr>
+            <td><%= prettyTime(a.appt_time) %></td>
+            <td><%= a.customer_name %><small><%= a.phone %><%= a.email ? ' · ' + a.email : '' %></small></td>
+            <td><%= a.service_name %><small><%= a.reference %></small></td>
+            <td><%= a.duration %> min</td>
+            <td><%= rupees(a.price) %></td>
+            <td><span class="status status-<%= a.status %>"><%= a.status %></span></td>
+            <td class="row-actions">
+              <a class="link" href="tel:<%= a.phone.replace(/\D/g,'') %>">Call</a>
+              <% if (['confirmed','pending'].includes(a.status)) { %>
+                <button class="link" data-action="completed" data-id="<%= a.id %>">Complete</button>
+                <button class="link danger" data-action="cancelled" data-id="<%= a.id %>">Cancel</button>
+              <% } else { %>
+                <button class="link" data-action="confirmed" data-id="<%= a.id %>">Restore</button>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head">
+    <h2>All appointments</h2>
+    <div class="filter-tabs small">
+      <a class="tab <%= !status ? 'active' : '' %>" href="/admin/appointments">All</a>
+      <% ['confirmed','pending','completed','cancelled'].forEach(function (s) { %>
+        <a class="tab <%= status === s ? 'active' : '' %>" href="/admin/appointments?status=<%= s %>"><%= s %></a>
+      <% }); %>
+    </div>
+  </div>
+  <% if (!appointments.length) { %>
+    <p class="empty-state">No appointments found.</p>
+  <% } else { %>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Booking ID</th><th>Date</th><th>Time</th><th>Customer</th><th>Service</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <% appointments.forEach(function (a) { %>
+          <tr>
+            <td><code><%= a.reference %></code></td>
+            <td><%= prettyDate(a.appt_date) %></td>
+            <td><%= prettyTime(a.appt_time) %></td>
+            <td><%= a.customer_name %></td>
+            <td><%= a.service_name %></td>
+            <td><span class="status status-<%= a.status %>"><%= a.status %></span></td>
+            <td><a class="link" href="/booking/<%= a.reference %>" target="_blank" rel="noopener">Open</a></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+<%- include('partials/foot') %>

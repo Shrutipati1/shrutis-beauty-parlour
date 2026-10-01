@@ -1,0 +1,58 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-intro">
+        <h2><%= cfg.business_name %></h2>
+        <p class="footer-tagline"><%= cfg.tagline %></p>
+        <p class="footer-note"><%= cfg.about_text ? cfg.about_text.slice(0, 150) + '…' : '' %></p>
+        <div class="social-row">
+          <% if (cfg.instagram_url) { %><a href="<%= cfg.instagram_url %>" rel="noopener noreferrer" target="_blank" aria-label="Instagram">IG</a><% } %>
+          <% if (cfg.facebook_url) { %><a href="<%= cfg.facebook_url %>" rel="noopener noreferrer" target="_blank" aria-label="Facebook">FB</a><% } %>
+          <% if (whatsappUrl) { %><a href="<%= whatsappUrl %>" rel="noopener noreferrer" target="_blank" aria-label="WhatsApp">WA</a><% } %>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <% navItems.forEach(function (item) { %><a href="<%= item.href %>"><%= item.label %></a><% }); %>
+      </div>
+
+      <div class="footer-col">
+        <h3>Popular Services</h3>
+        <% (typeof services !== 'undefined' && services ? services : []).slice(0, 6).forEach(function (s) { %>
+          <a href="/services#service-<%= s.id %>"><%= s.name %></a>
+        <% }); %>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <% if (cfg.phone) { %><a href="tel:<%= cfg.phone.replace(/\D/g,'') %>"><%= cfg.phone %></a><% } else { %><span class="placeholder">[Add phone number]</span><% } %>
+        <% if (cfg.email) { %><a href="mailto:<%= cfg.email %>"><%= cfg.email %></a><% } else { %><span class="placeholder">[Add email address]</span><% } %>
+        <% if (cfg.address_line) { %><span><%= cfg.address_line %><%= cfg.city ? ', ' + cfg.city : '' %></span><% } else { %><span class="placeholder">[Add address]</span><% } %>
+        <span class="hours-line"><%= prettyTime(cfg.open_time) %> – <%= prettyTime(cfg.close_time) %></span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <%= year %> <%= cfg.business_name %>. All rights reserved.</p>
+      <p class="footer-legal"><%= cfg.disclaimer %></p>
+    </div>
+  </div>
+</footer>
+
+<% if (whatsappUrl) { %>
+<a class="wa-float" href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.2 1.2-1.7 1.2-1.4.1-3.4-1.5-4.6-2.7-1.2-1.2-2.5-3-2.4-4.3.1-.6.7-1.4 1.3-1.6.3-.1.7 0 .9.4l.7 1.4c.1.3 0 .5-.2.7l-.4.4c-.2.2-.2.4 0 .6.4.6 1 1.3 1.7 1.7.2.1.5.1.6-.1l.5-.6c.2-.2.4-.2.6-.1l1.4.8c.3.2.4.5.2.9Z"/></svg>
+  <span>WhatsApp</span>
+</a>
+<% } %>
+
+<div class="mobile-book-bar">
+  <a class="btn btn-outline" href="tel:<%= (cfg.phone || '').replace(/\D/g,'') %>">Call</a>
+  <a class="btn btn-primary" href="/book">Book Appointment</a>
+</div>
+
+<script src="/js/main.js" defer></script>
+<% if (typeof pageScript !== 'undefined') { %><script src="<%= pageScript %>" defer></script><% } %>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<%- include('partials/head') %>
+<section class="admin-panel">
+  <div class="panel-head">
+    <h2>Add a service</h2>
+  </div>
+  <form class="admin-form" id="serviceForm" method="post" action="/admin/services/save" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="">
+    <div class="form-grid">
+      <label class="field"><span>Name *</span><input type="text" name="name" required></label>
+      <label class="field"><span>Category</span>
+        <select name="category">
+          <% categories.forEach(function (c) { %><option value="<%= c %>"><%= c %></option><% }); %>
+        </select>
+      </label>
+      <label class="field"><span>Price (₹) *</span><input type="number" name="price" min="0" max="999999" step="10" required></label>
+      <label class="field"><span>Duration (minutes) *</span><input type="number" name="duration" min="15" max="480" step="5" required></label>
+      <label class="field"><span>Sort order</span><input type="number" name="sort_order" min="0" value="0"></label>
+      <label class="field"><span>Active</span>
+        <select name="active"><option value="1">Visible on website</option><option value="0">Hidden</option></select>
+      </label>
+      <label class="field span-2"><span>Description</span><textarea name="description" rows="2" placeholder="Short description shown on the website"></textarea></label>
+      <label class="field"><span>Upload image</span><input type="file" name="image" accept="image/*"></label>
+      <label class="field"><span>…or image URL</span><input type="url" name="image_url" placeholder="https://…"></label>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" type="submit">Save service</button>
+      <button class="btn btn-ghost" type="button" id="serviceReset">Clear form</button>
+    </div>
+  </form>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>All services (<%= services.length %>)</h2></div>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Image</th><th>Service</th><th>Category</th><th>Price</th><th>Duration</th><th>Visible</th><th></th></tr></thead>
+      <tbody>
+        <% services.forEach(function (s) { %>
+          <tr>
+            <td><img class="thumb" src="<%= s.image %>" alt=""></td>
+            <td><strong><%= s.name %></strong><small><%= s.description.slice(0, 70) %></small></td>
+            <td><%= s.category %></td>
+            <td><%= rupees(s.price) %></td>
+            <td><%= s.duration %> min</td>
+            <td><span class="status status-<%= s.active ? 'confirmed' : 'cancelled' %>"><%= s.active ? 'live' : 'hidden' %></span></td>
+            <td class="row-actions">
+              <button class="link" data-edit-service="<%= s.id %>">Edit</button>
+              <button class="link danger" data-delete-service="<%= s.id %>" data-name="<%= s.name %>">Delete</button>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<script type="application/json" id="servicesData"><%- JSON.stringify(services) %></script>
+<%- include('partials/foot', { adminScript: '/js/admin-services.js' }) %>

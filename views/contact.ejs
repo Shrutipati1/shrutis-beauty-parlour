@@ -1,0 +1,80 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Contact</p>
+      <h1>Visit <%= cfg.business_name %></h1>
+      <p class="lead">Call, message or book online. We are happy to answer questions about services, timings and bridal availability.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <ul class="contact-list big">
+          <li>
+            <span class="ci">Phone</span>
+            <% if (cfg.phone) { %><a href="tel:<%= cfg.phone.replace(/\D/g,'') %>"><%= cfg.phone %></a><% } else { %><span class="placeholder">[Add actual number later]</span><% } %>
+          </li>
+          <li>
+            <span class="ci">Email</span>
+            <% if (cfg.email) { %><a href="mailto:<%= cfg.email %>"><%= cfg.email %></a><% } else { %><span class="placeholder">[Add actual email later]</span><% } %>
+          </li>
+          <li>
+            <span class="ci">Address</span>
+            <% if (cfg.address_line) { %><span><%= cfg.address_line %><%= cfg.city ? ', ' + cfg.city : '' %></span><% } else { %><span class="placeholder">[Add actual address later]</span><% } %>
+          </li>
+          <li>
+            <span class="ci">Opening hours</span>
+            <span><%= prettyTime(cfg.open_time) %> – <%= prettyTime(cfg.close_time) %><br><small><%= cfg.salon_closed_note %></small></span>
+          </li>
+        </ul>
+
+        <div class="btn-row">
+          <% if (cfg.phone) { %>
+            <a class="btn btn-primary" href="tel:<%= cfg.phone.replace(/\D/g,'') %>">Call now</a>
+          <% } %>
+          <% if (whatsappUrl) { %>
+            <a class="btn btn-outline" href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <% } %>
+          <% if (cfg.email) { %>
+            <a class="btn btn-outline" href="mailto:<%= cfg.email %>">Email</a>
+          <% } %>
+          <a class="btn btn-outline" href="/book">Book online</a>
+        </div>
+
+        <div class="social-row large">
+          <% if (cfg.instagram_url) { %><a href="<%= cfg.instagram_url %>" target="_blank" rel="noopener noreferrer">Instagram</a><% } %>
+          <% if (cfg.facebook_url) { %><a href="<%= cfg.facebook_url %>" target="_blank" rel="noopener noreferrer">Facebook</a><% } %>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <% if (cfg.maps_embed_url) { %>
+          <div class="map-frame">
+            <iframe src="<%= cfg.maps_embed_url %>" title="Map to <%= cfg.business_name %>" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        <% } else { %>
+          <div class="map-placeholder">
+            <h3>Google Map</h3>
+            <p>Paste your Google Maps embed link in <strong>Admin → Business Settings</strong> and it will appear here.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-strip">
+    <div class="container">
+      <h2 class="center faq-head">Frequently asked questions</h2>
+      <% faqs.forEach(function (f) { %>
+        <details class="faq-item">
+          <summary><%= f.question %></summary>
+          <p><%= f.answer %></p>
+        </details>
+      <% }); %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

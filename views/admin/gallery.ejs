@@ -1,0 +1,42 @@
+<%- include('partials/head') %>
+<section class="admin-panel">
+  <div class="panel-head"><h2>Add an image</h2></div>
+  <form class="admin-form" id="galleryForm" method="post" action="/admin/gallery/save" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="">
+    <div class="form-grid">
+      <label class="field"><span>Title</span><input type="text" name="title" placeholder="e.g. Bridal glow"></label>
+      <label class="field"><span>Category</span>
+        <select name="category">
+          <% categories.forEach(function (c) { %><option value="<%= c %>"><%= c %></option><% }); %>
+          <option value="Salon">Salon</option>
+        </select>
+      </label>
+      <label class="field"><span>Upload image</span><input type="file" name="image" accept="image/*"></label>
+      <label class="field"><span>…or image URL</span><input type="url" name="image_url" placeholder="https://…"></label>
+      <label class="field"><span>Sort order</span><input type="number" name="sort_order" min="0" value="0"></label>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" type="submit">Save image</button>
+      <button class="btn btn-ghost" type="button" id="galleryReset">Clear form</button>
+    </div>
+    <p class="admin-hint">Uploads are stored in <code>public/uploads</code>. Use images you own or are licensed to use.</p>
+  </form>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Gallery (<%= items.length %>)</h2></div>
+  <div class="gallery-admin-grid">
+    <% items.forEach(function (g) { %>
+      <figure>
+        <img src="<%= g.image_url %>" alt="<%= g.title %>" loading="lazy">
+        <figcaption><strong><%= g.title || 'Untitled' %></strong><small><%= g.category %></small></figcaption>
+        <div class="row-actions">
+          <button class="link" data-edit-gallery="<%= g.id %>">Edit</button>
+          <button class="link danger" data-delete-gallery="<%= g.id %>">Delete</button>
+        </div>
+      </figure>
+    <% }); %>
+  </div>
+</section>
+<script type="application/json" id="galleryData"><%- JSON.stringify(items) %></script>
+<%- include('partials/foot', { adminScript: '/js/admin-services.js' }) %>

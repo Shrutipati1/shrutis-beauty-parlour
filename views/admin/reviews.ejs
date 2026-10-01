@@ -1,0 +1,53 @@
+<%- include('partials/head') %>
+<section class="admin-panel">
+  <div class="panel-head"><h2>Add a review</h2></div>
+  <form class="admin-form" id="reviewForm" method="post" action="/admin/reviews/save">
+    <input type="hidden" name="id" value="">
+    <div class="form-grid">
+      <label class="field"><span>Customer name *</span><input type="text" name="name" required></label>
+      <label class="field"><span>Rating *</span>
+        <select name="rating">
+          <% [5,4,3,2,1].forEach(function (r) { %><option value="<%= r %>"><%= r %> star<%= r > 1 ? 's' : '' %></option><% }); %>
+        </select>
+      </label>
+      <label class="field span-2"><span>Review text *</span><textarea name="body" rows="3" required></textarea></label>
+      <label class="field"><span>Mark as sample</span>
+        <select name="is_sample"><option value="1">Yes — sample placeholder</option><option value="0">No — real review</option></select>
+      </label>
+      <label class="field"><span>Published</span>
+        <select name="published"><option value="1">Visible on site</option><option value="0">Hidden</option></select>
+      </label>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" type="submit">Save review</button>
+      <button class="btn btn-ghost" type="button" id="reviewReset">Clear form</button>
+    </div>
+    <p class="admin-hint">Only mark a review as “real” when the customer genuinely gave that feedback.</p>
+  </form>
+</section>
+
+<section class="admin-panel">
+  <div class="panel-head"><h2>Reviews (<%= reviews.length %>)</h2></div>
+  <div class="table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Rating</th><th>Review</th><th>Type</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <% reviews.forEach(function (r) { %>
+          <tr>
+            <td><strong><%= r.name %></strong></td>
+            <td><%= '★'.repeat(r.rating) %></td>
+            <td><%= r.body.slice(0, 90) %><%= r.body.length > 90 ? '…' : '' %></td>
+            <td><span class="status status-<%= r.is_sample ? 'pending' : 'confirmed' %>"><%= r.is_sample ? 'sample' : 'real' %></span></td>
+            <td><%= r.published ? 'Published' : 'Hidden' %></td>
+            <td class="row-actions">
+              <button class="link" data-edit-review="<%= r.id %>">Edit</button>
+              <button class="link danger" data-delete-review="<%= r.id %>">Delete</button>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<script type="application/json" id="reviewsData"><%- JSON.stringify(reviews) %></script>
+<%- include('partials/foot', { adminScript: '/js/admin-services.js' }) %>

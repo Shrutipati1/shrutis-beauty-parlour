@@ -1,0 +1,280 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-media" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1800&q=85" alt="">
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <p class="hero-eyebrow"><span class="dot"></span> Beauty parlour · Hair · Makeup · Bridal</p>
+      <h1 class="hero-title"><%= cfg.business_name %></h1>
+      <p class="hero-tagline"><%= cfg.tagline %></p>
+      <p class="hero-text"><%= cfg.hero_subtext %></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/book">Book an Appointment</a>
+        <a class="btn btn-ghost btn-lg" href="/services">Explore Services</a>
+      </div>
+      <div class="hero-meta">
+        <span class="pill"><%= prettyTime(cfg.open_time) %> – <%= prettyTime(cfg.close_time) %></span>
+        <% if (cfg.phone) { %><span class="pill"><%= cfg.phone %></span><% } else { %><span class="pill placeholder">[Add phone number]</span><% } %>
+        <span class="pill"><%= cfg.salon_closed_note %></span>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section about" id="about">
+    <div class="container about-grid">
+      <div class="about-media reveal">
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85" alt="Inside a calm, welcoming beauty parlour" loading="lazy">
+        <div class="about-badge">
+          <strong>Personalised</strong>
+          <span>Every appointment starts with a conversation</span>
+        </div>
+      </div>
+      <div class="about-copy reveal">
+        <p class="eyebrow">About us</p>
+        <h2>Beauty that feels like <em>you</em></h2>
+        <p class="lead"><%= cfg.about_text %></p>
+        <ul class="check-list">
+          <li><strong>Experience</strong> — years of hands-on practice across everyday and occasion looks.</li>
+          <li><strong>Professional service</strong> — friendly, punctual and unhurried appointments.</li>
+          <li><strong>Personalised attention</strong> — services adapted to your hair, skin and comfort.</li>
+          <li><strong>Hygienic environment</strong> — sanitised tools and fresh disposables for every client.</li>
+          <li><strong>Quality products</strong> — trusted brands chosen for your hair and skin type.</li>
+        </ul>
+        <a class="btn btn-outline" href="/about">More about us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="section section-blush services" id="services">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Our services</p>
+        <h2>Something for <em>every</em> occasion</h2>
+        <p>Sample prices and timings shown below. Final pricing is confirmed at the salon and can be changed anytime from the admin dashboard.</p>
+      </div>
+
+      <div class="service-grid">
+        <% services.slice(0, 8).forEach(function (s) { %>
+          <article class="service-card reveal">
+            <div class="service-media">
+              <img src="<%= s.image %>" alt="<%= s.name %> at <%= cfg.business_name %>" loading="lazy">
+              <span class="service-cat"><%= s.category %></span>
+            </div>
+            <div class="service-body">
+              <h3><%= s.name %></h3>
+              <p><%= s.description %></p>
+              <div class="service-meta">
+                <span class="price"><%= rupees(s.price) %></span>
+                <span class="duration"><%= s.duration %> min</span>
+              </div>
+              <a class="btn btn-primary btn-block" href="/book?service=<%= s.id %>">Book Now</a>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+
+      <div class="center mt-lg"><a class="btn btn-outline" href="/services">View full service menu &amp; prices</a></div>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE US ============ -->
+  <section class="section why">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Why choose us</p>
+        <h2>The details that make a <em>difference</em></h2>
+      </div>
+      <div class="why-grid">
+        <article class="why-card reveal">
+          <span class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m12 3 2.2 5.4L20 10l-5.8 1.6L12 17l-2.2-5.4L4 10l5.8-1.6L12 3Z"/></svg>
+          </span>
+          <h3>Professional Service</h3>
+          <p>Trained in modern techniques and classic care, with respect for your time and your appointment slot.</p>
+        </article>
+        <article class="why-card reveal">
+          <span class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.8C19 15.6 12 20 12 20Z"/></svg>
+          </span>
+          <h3>Personalized Attention</h3>
+          <p>We listen first — your preferences, sensitivities and comfort level shape every service we perform.</p>
+        </article>
+        <article class="why-card reveal">
+          <span class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3c4 4 6 6.5 6 9a6 6 0 1 1-12 0c0-2.5 2-5 6-9Z"/></svg>
+          </span>
+          <h3>Hygienic Environment</h3>
+          <p>Tools are sanitised between clients, linens are changed and disposables are used wherever possible.</p>
+        </article>
+        <article class="why-card reveal">
+          <span class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16v12H4zM4 7l3-3h10l3 3M9 12h6"/></svg>
+          </span>
+          <h3>Affordable Beauty Services</h3>
+          <p>Honest sample pricing with no hidden charges, so you always know what your appointment will cost.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BRIDAL ============ -->
+  <section class="section bridal">
+    <div class="container bridal-grid">
+      <div class="bridal-copy reveal">
+        <p class="eyebrow light">Bridal &amp; events</p>
+        <h2>Look beautiful on your <em>special day</em></h2>
+        <p>From a soft pre-bridal glow to a flawless wedding-day look, every bridal plan begins with a trial and a proper conversation about your dress, venue and comfort.</p>
+        <ul class="bridal-list">
+          <li><span>01</span> Bridal Makeup — HD finish, lashes and draping support</li>
+          <li><span>02</span> Bridal Hairstyle — elegant updos, waves and braided styles</li>
+          <li><span>03</span> Pre-bridal Beauty — facials, cleanup and trial sessions</li>
+          <li><span>04</span> Event Makeup — parties, receptions and engagements</li>
+          <li><span>05</span> Custom Styling — tailored to your outfit and look</li>
+        </ul>
+        <a class="btn btn-primary btn-lg" href="/book?category=bridal">Book Bridal Consultation</a>
+      </div>
+      <div class="bridal-media reveal">
+        <img class="bridal-main" src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=85" alt="Bridal makeup look" loading="lazy">
+        <img class="bridal-inset" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=85" alt="Makeup artist applying bridal makeup" loading="lazy">
+        <span class="bridal-tag">Bridal package</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <% if (gallery && gallery.length) { %>
+  <section class="section section-blush gallery-preview">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Gallery</p>
+        <h2>A peek inside our <em>work</em></h2>
+        <p>Sample imagery for layout purposes — replace with your own photos from the admin dashboard.</p>
+      </div>
+      <div class="gallery-strip">
+        <% gallery.forEach(function (g) { %>
+          <figure class="reveal">
+            <img src="<%= g.image_url %>" alt="<%= g.title || g.category %>" loading="lazy">
+            <figcaption><%= g.category %></figcaption>
+          </figure>
+        <% }); %>
+      </div>
+      <div class="center mt-lg"><a class="btn btn-outline" href="/gallery">Open full gallery</a></div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="section testimonials-preview">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Kind words</p>
+        <h2>Sample <em>testimonials</em></h2>
+        <p class="notice-inline">These are clearly marked sample reviews for layout purposes. Real client reviews can be added from the admin dashboard.</p>
+      </div>
+      <div class="review-grid">
+        <% reviews.forEach(function (r) { %>
+          <article class="review-card reveal">
+            <div class="stars" aria-label="<%= r.rating %> out of 5 stars"><%= '★'.repeat(r.rating) %><span class="stars-dim"><%= '★'.repeat(5 - r.rating) %></span></div>
+            <p><%= r.body %></p>
+            <footer>
+              <strong><%= r.name %></strong>
+              <% if (r.is_sample) { %><span class="badge-sample">Sample</span><% } %>
+            </footer>
+          </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APPOINTMENT CTA ============ -->
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <div>
+        <p class="eyebrow light">Ready when you are</p>
+        <h2>Book your appointment in a few taps</h2>
+        <p class="cta-text">Choose a service, pick a date and grab an available time slot instantly. You will get a booking ID, calendar file and WhatsApp updates.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary btn-lg" href="/book">Book Appointment</a>
+        <a class="btn btn-ghost btn-lg" href="/services">See prices</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section contact" id="contact">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <p class="eyebrow">Visit us</p>
+        <h2>Come say <em>hello</em></h2>
+        <p class="lead">Walk-ins are welcome when we have space, but booking ahead guarantees your preferred time. We would love to welcome you.</p>
+        <ul class="contact-list">
+          <li><span class="ci">Phone</span><% if (cfg.phone) { %><a href="tel:<%= cfg.phone.replace(/\D/g,'') %>"><%= cfg.phone %></a><% } else { %><span class="placeholder">[Add phone number]</span><% } %></li>
+          <li><span class="ci">Email</span><% if (cfg.email) { %><a href="mailto:<%= cfg.email %>"><%= cfg.email %></a><% } else { %><span class="placeholder">[Add email address]</span><% } %></li>
+          <li><span class="ci">Address</span><% if (cfg.address_line) { %><span><%= cfg.address_line %><%= cfg.city ? ', ' + cfg.city : '' %></span><% } else { %><span class="placeholder">[Add address]</span><% } %></li>
+          <li><span class="ci">Hours</span><span><%= prettyTime(cfg.open_time) %> – <%= prettyTime(cfg.close_time) %><br><small><%= cfg.salon_closed_note %></small></span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/book">Book Appointment</a>
+          <% if (whatsappUrl) { %><a class="btn btn-outline" href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer">WhatsApp us</a><% } %>
+        </div>
+      </div>
+      <div class="contact-card reveal">
+        <h3>Quick booking</h3>
+        <p>Select a service to see live availability.</p>
+        <form action="/api/appointments" method="post" class="quick-form" data-quick-booking>
+          <label class="field">
+            <span>Full name</span>
+            <input type="text" name="name" required autocomplete="name" placeholder="Your name">
+          </label>
+          <label class="field">
+            <span>Mobile number</span>
+            <input type="tel" name="phone" required inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile">
+          </label>
+          <label class="field">
+            <span>Service</span>
+            <select name="service_id" required>
+              <option value="">Choose a service</option>
+              <% services.forEach(function (s) { %><option value="<%= s.id %>"><%= s.name %> — <%= rupees(s.price) %></option><% }); %>
+            </select>
+          </label>
+          <label class="field">
+            <span>Date</span>
+            <input type="date" name="date" required>
+          </label>
+          <button class="btn btn-primary btn-block" type="submit">Check availability</button>
+          <p class="form-msg" data-quick-msg role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-strip">
+    <div class="container">
+      <details class="faq-item">
+        <summary>How do I book an appointment?</summary>
+        <p>Use the Book Appointment button, choose your service, date and an available time slot. Your booking is confirmed instantly with a booking ID.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I cancel or reschedule?</summary>
+        <p>Yes — use the link in your confirmation to cancel or move your appointment. Cancelling frees the slot for someone else immediately.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need to pay online?</summary>
+        <p><%= cfg.payment_note %></p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<%- include('partials/footer') %>

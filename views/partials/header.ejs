@@ -1,0 +1,24 @@
+<header class="site-header" id="siteHeader">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="<%= cfg.business_name %> home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><path d="M20 5c5 6 8 10 8 14a8 8 0 1 1-16 0c0-4 3-8 8-14Z"/><path d="M12 33h16" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-text">
+        <strong><%= cfg.business_name %></strong>
+        <small><%= cfg.tagline %></small>
+      </span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <% navItems.forEach(function (item) { %>
+        <a href="<%= item.href %>" class="<%= currentPath === item.href ? 'active' : '' %>"><%= item.label %></a>
+      <% }); %>
+      <a class="btn btn-primary btn-sm nav-book" href="/book">Book Appointment</a>
+    </nav>
+
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,101 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main id="main">
+  <section class="section confirm-section">
+    <div class="container confirm-wrap">
+      <div class="confirm-card">
+        <% if (appt.status === 'cancelled') { %>
+          <div class="confirm-head cancelled">
+            <span class="confirm-emoji">✕</span>
+            <h1>Appointment cancelled</h1>
+            <p>This booking has been cancelled and the time slot is free again.</p>
+          </div>
+        <% } else if (appt.status === 'completed') { %>
+          <div class="confirm-head completed">
+            <span class="confirm-emoji">✓</span>
+            <h1>Thank you for visiting</h1>
+            <p>This appointment is marked as completed.</p>
+          </div>
+        <% } else { %>
+          <div class="confirm-head">
+            <span class="confirm-emoji">🎉</span>
+            <h1>Appointment Confirmed!</h1>
+            <p>We look forward to seeing you. A copy of these details is below.</p>
+          </div>
+        <% } %>
+
+        <div class="booking-id">
+          <small>Booking ID</small>
+          <strong><%= appt.reference %></strong>
+        </div>
+
+        <dl class="confirm-list">
+          <div><dt>Customer</dt><dd><%= appt.customer_name %></dd></div>
+          <div><dt>Service</dt><dd><%= appt.service_name %></dd></div>
+          <div><dt>Date</dt><dd><%= prettyDate(appt.appt_date) %></dd></div>
+          <div><dt>Time</dt><dd><%= prettyTime(appt.appt_time) %> <small>(<%= appt.duration %> minutes)</small></dd></div>
+          <div><dt>Price</dt><dd><%= rupees(appt.price) %></dd></div>
+          <div><dt>Phone</dt><dd><%= appt.phone %></dd></div>
+          <% if (appt.email) { %><div><dt>Email</dt><dd><%= appt.email %></dd></div><% } %>
+          <% if (appt.message) { %><div><dt>Notes</dt><dd><%= appt.message %></dd></div><% } %>
+        </dl>
+
+        <div class="salon-card">
+          <h3><%= cfg.business_name %></h3>
+          <p><%= prettyTime(cfg.open_time) %> – <%= prettyTime(cfg.close_time) %> · <%= cfg.salon_closed_note %></p>
+          <% if (cfg.address_line) { %><p><%= cfg.address_line %><%= cfg.city ? ', ' + cfg.city : '' %></p><% } %>
+          <% if (cfg.phone) { %><p><a href="tel:<%= cfg.phone.replace(/\D/g,'') %>"><%= cfg.phone %></a></p><% } %>
+        </div>
+
+        <div class="btn-row center">
+          <a class="btn btn-primary" href="/booking/<%= appt.reference %>/calendar">Add to Calendar</a>
+          <% if (whatsappBooked) { %>
+            <a class="btn btn-outline" href="<%= whatsappBooked %>" target="_blank" rel="noopener noreferrer">Contact Salon</a>
+          <% } %>
+          <a class="btn btn-ghost" href="/">Back to home</a>
+        </div>
+
+        <p class="form-note"><%= cfg.disclaimer %></p>
+      </div>
+
+      <% if (['confirmed','pending'].includes(appt.status)) { %>
+      <div class="manage-card">
+        <h2>Need to change this?</h2>
+        <p class="muted">Use the options below. Cancelling releases your slot immediately.</p>
+        <div class="btn-row">
+          <button class="btn btn-outline" type="button" id="rescheduleBtn">Reschedule</button>
+          <button class="btn btn-danger-ghost" type="button" id="cancelBtn">Cancel appointment</button>
+        </div>
+        <p class="form-note" id="manageMsg" role="status"></p>
+
+        <form id="rescheduleForm" class="reschedule-form" hidden>
+          <h3>Pick a new slot</h3>
+          <div class="field-row">
+            <label class="field">
+              <span>New date</span>
+              <input type="date" id="reDate" required>
+            </label>
+            <label class="field">
+              <span>New time</span>
+              <select id="reTime" required disabled><option value="">Choose date first</option></select>
+            </label>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Confirm new time</button>
+        </form>
+      </div>
+      <% } %>
+
+      <div class="booking-help">
+        <p>Please arrive a few minutes early. If you need to change anything, quote your booking ID <strong><%= appt.reference %></strong>.</p>
+        <% if (minCancelHours > 0) { %><p class="muted">Online changes close <%= minCancelHours %> hours before your appointment time — call us after that.</p><% } %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+window.__bookingRef = "<%= appt.reference %>";
+window.__bookingDuration = <%= appt.duration %>;
+window.__availBase = "/api/availability?serviceId=<%= appt.service_id || '' %>";
+</script>
+<%- include('partials/footer', { pageScript: '/js/manage.js' }) %>
